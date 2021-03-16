@@ -9,8 +9,8 @@ import (
 
 var (
 	helpFlag = flag.Bool("h", false, "Show this help")
-	knownPrefix = flag.String("p", "28:99:c7", "Specify the OUI (first six hex) with colon (:) or dash (-) separators")
-	numFlag = flag.Int("n", 1, "Number of entries to generate")
+	knownPrefix = flag.String("p", "28:99:c7", "Specify the OUI (first six hex) separated by colon (:) or dash (-)")
+	numFlag = flag.Int("n", 1, "Number of entries to generate (up to 1000)")
 )
 
 const usage = "`macGenerator` [options]"
@@ -56,7 +56,7 @@ func generateMac(p []string, n int) {
 	}
 
 	for i := 0; i < n; i++ {
-		buf = randomSixHex()
+		buf = randomSix()
 		if hasPrefix {
 			fmt.Printf("%s:%s:%s:%02x:%02x:%02x\n", p[0], p[1], p[2], buf[3], buf[4], buf[5])
 		} else {
@@ -65,7 +65,7 @@ func generateMac(p []string, n int) {
 	}
 }
 
-func randomSixHex() []byte {
+func randomSix() []byte {
 	buf := make([]byte, 6)
 	_, err := rand.Read(buf)
 	if err != nil {
